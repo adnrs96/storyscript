@@ -13,23 +13,30 @@ class App:
     """
 
     @staticmethod
-    def parse(path, ignored_path=None, ebnf=None, lower=False, features=None):
+    def parse(path=None, ignored_path=None, story=None,
+              ebnf=None, lower=False, features=None):
         """
-        Parses stories found in path, returning their trees
+        Parses stories found in path or a given story, returning their tree(s)
         """
-        bundle = Bundle.from_path(path, ignored_path=ignored_path,
-                                  features=features)
+        if story is not None:
+            bundle = Bundle.from_string(story, features=features)
+        else:
+            bundle = Bundle.from_path(path, ignored_path=ignored_path,
+                                      features=features)
         return bundle.bundle_trees(ebnf=ebnf, lower=lower)
 
     @staticmethod
-    def format(path, ebnf=None, features=None, inplace=False):
+    def format(path=None, story=None, ebnf=None, features=None, inplace=False):
         """
         Parses stories found in path, returning the formatted source
         """
         parser = Bundle.parser(ebnf=ebnf)
-        story = Story.from_file(path, features=features)
-        output = story.parse(parser=parser).format()
-        if inplace:
+        if story is not None:
+            _story = Story(story, features=features)
+        else:
+            _story = Story.from_file(path, features=features)
+        output = _story.parse(parser=parser).format()
+        if inplace and story is None:
             with open(path, 'w') as w:
                 w.write(output)
             return None
@@ -37,13 +44,16 @@ class App:
         return output
 
     @staticmethod
-    def compile(path, ignored_path=None, ebnf=None, concise=False,
-                first=False, features=None):
+    def compile(path=None, ignored_path=None, story=None, ebnf=None,
+                concise=False, first=False, features=None):
         """
         Parses and compiles stories found in path, returning JSON
         """
-        bundle = Bundle.from_path(path, ignored_path=ignored_path,
-                                  features=features)
+        if story is not None:
+            bundle = Bundle.from_string(story, features=features)
+        else:
+            bundle = Bundle.from_path(path, ignored_path=ignored_path,
+                                      features=features)
         result = bundle.bundle(ebnf=ebnf)
         if concise:
             result = _clean_dict(result)
@@ -54,11 +64,15 @@ class App:
         return json.dumps(result, indent=2)
 
     @staticmethod
-    def lex(path, features, ebnf=None):
+    def lex(path=None, features=None, story=None, ebnf=None):
         """
         Lex stories, producing the list of used tokens
         """
-        return Bundle.from_path(path, features=features).lex(ebnf=ebnf)
+        if story is not None:
+            bundle = Bundle.from_string(story, features=features)
+        else:
+            bundle = Bundle.from_path(path, features=features)
+        return bundle.lex(ebnf=ebnf)
 
     @staticmethod
     def grammar():

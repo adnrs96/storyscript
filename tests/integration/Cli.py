@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from unittest import mock
 
 from click.testing import CliRunner
@@ -10,7 +11,8 @@ from storyscript.Cli import Cli
 
 
 @fixture
-def runner():
+def runner(mocker):
+    mocker.patch.object(os, 'isatty', return_value=True)
     return CliRunner()
 
 
@@ -20,11 +22,10 @@ def open_mock(mocker):
     return m
 
 
-def test_cli_exit_code(open_mock):
+def test_cli_exit_code(runner, open_mock):
     """
     Ensures that compiler exits with a non-zero exit code on errors
     """
-    runner = CliRunner()
     mock.mock_open(open_mock, read_data='foo =')
     e = runner.invoke(Cli.compile, ['/path/a.story'])
 
@@ -42,11 +43,10 @@ E0007: Missing value after `=`
 @mark.parametrize('path', [
     [], ['.']
 ])
-def test_cli_multiple_files(path):
+def test_cli_multiple_files(runner, path):
     """
     Ensures that compiler works correctly with multiple stories.
     """
-    runner = CliRunner()
     with runner.isolated_filesystem():
         with open('a.story', 'w') as f:
             f.write('a = 1')
@@ -56,12 +56,11 @@ def test_cli_multiple_files(path):
         assert e.exit_code == 0
 
 
-def test_cli_multiple_files_filename():
+def test_cli_multiple_files_filename(runner):
     """
     Ensures that compiler errors with the correct filename when parsing
     multiple stories.
     """
-    runner = CliRunner()
     with runner.isolated_filesystem():
         with open('a.story', 'w') as f:
             f.write('a = 1')
@@ -180,11 +179,10 @@ def test_cli_lex(open_mock, runner):
     assert e.exit_code == 0
 
 
-def test_cli_format(open_mock):
+def test_cli_format(runner, open_mock):
     """
     Ensures that compiler calls format properly
     """
-    runner = CliRunner()
     mock.mock_open(open_mock, read_data='foo=1')
     e = runner.invoke(Cli.format, ['/path/a.story'])
 
@@ -192,11 +190,18 @@ def test_cli_format(open_mock):
     assert e.output == 'foo = 1\n'
 
 
-def test_cli_format_error(open_mock):
+def test_cli_format_string_story(runner, mocker):
+    mocker.patch.object(os, 'isatty', return_value=False)
+    e = runner.invoke(Cli.format, [], input='foo=1')
+
+    assert e.exit_code == 0
+    assert e.output == 'foo = 1\n'
+
+
+def test_cli_format_error(runner, open_mock):
     """
     Ensures that compiler handles format errors properly.
     """
-    runner = CliRunner()
     mock.mock_open(open_mock, read_data='a = $')
     e = runner.invoke(Cli.format, ['/path/b.story'])
 
@@ -227,11 +232,10 @@ def test_cli_format_exit_file_not_found(runner):
 @mark.parametrize('inplace_argument', [
     '-i', '--inplace'
 ])
-def test_cli_format_inplace(inplace_argument):
+def test_cli_format_inplace(runner, inplace_argument):
     """
     Ensures that in-place format works.
     """
-    runner = CliRunner()
     with runner.isolated_filesystem():
         with open('a.story', 'w') as f:
             f.write('a=1')

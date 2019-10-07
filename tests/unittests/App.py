@@ -12,7 +12,8 @@ from storyscript.parser import Grammar
 
 @fixture
 def bundle(patch):
-    patch.many(Bundle, ['from_path', 'bundle_trees', 'bundle', 'lex'])
+    patch.many(Bundle, ['from_path', 'from_string',
+                        'bundle_trees', 'bundle', 'lex'])
 
 
 def test_app_parse(bundle):
@@ -25,6 +26,15 @@ def test_app_parse(bundle):
     bt = Bundle.from_path().bundle_trees
     bt.assert_called_with(ebnf=None, lower=False)
     assert result == Bundle.from_path().bundle_trees()
+
+
+def test_app_parse_story_string(bundle):
+    story = 'a = 1'
+    result = App.parse(story=story)
+    Bundle.from_string.assert_called_with(story, features=None)
+    bt = Bundle.from_string().bundle_trees
+    bt.assert_called_with(ebnf=None, lower=False)
+    assert result == Bundle.from_string().bundle_trees()
 
 
 def test_app_parse_ignored_path(bundle):
@@ -63,6 +73,16 @@ def test_app_compile(patch, bundle):
                                         features=None)
     Bundle.from_path().bundle.assert_called_with(ebnf=None)
     json.dumps.assert_called_with(Bundle.from_path().bundle(), indent=2)
+    assert result == json.dumps()
+
+
+def test_app_compile_story_string(patch, bundle):
+    story = 'a = 1'
+    patch.object(json, 'dumps')
+    result = App.compile(story=story)
+    Bundle.from_string.assert_called_with(story, features=None)
+    Bundle.from_string().bundle.assert_called_with(ebnf=None)
+    json.dumps.assert_called_with(Bundle.from_string().bundle(), indent=2)
     assert result == json.dumps()
 
 
@@ -131,6 +151,14 @@ def test_app_lex(bundle):
     Bundle.from_path.assert_called_with('/path', features=None)
     Bundle.from_path().lex.assert_called_with(ebnf=None)
     assert result == Bundle.from_path().lex()
+
+
+def test_app_lex_story_string(bundle):
+    story = 'a = 1'
+    result = App.lex(story=story, features=None)
+    Bundle.from_string.assert_called_with(story, features=None)
+    Bundle.from_string().lex.assert_called_with(ebnf=None)
+    assert result == Bundle.from_string().lex()
 
 
 def test_app_lex_ebnf(bundle):

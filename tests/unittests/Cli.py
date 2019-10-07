@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import io
+import os
 
 import click
 from click.testing import CliRunner
@@ -15,7 +16,8 @@ from storyscript.exceptions.StoryError import StoryError
 
 
 @fixture
-def runner():
+def runner(patch):
+    patch.object(os, 'isatty', return_value=True)
     return CliRunner()
 
 
@@ -28,6 +30,12 @@ def echo(patch):
 def app(patch):
     patch.many(App, ['compile', 'parse', 'format'])
     return App
+
+
+@fixture
+def stdin(patch, monkeypatch, magic):
+    patch.object(os, 'isatty', return_value=False)
+    return 'a = 1'
 
 
 def test_cli(runner, echo):
@@ -95,7 +103,7 @@ def test_cli_compile_with_ignore_option(runner, app):
     """
     runner.invoke(Cli.compile, ['path/fake.story',
                                 '--ignore', 'path/sub_dir/my_fake.story'])
-    App.compile.assert_called_with('path/fake.story', ebnf=None,
+    App.compile.assert_called_with(path='path/fake.story', ebnf=None,
                                    ignored_path='path/sub_dir/my_fake.story',
                                    concise=False, first=False, features={})
 
@@ -106,7 +114,7 @@ def test_cli_parse_with_ignore_option(runner, app):
     """
     runner.invoke(Cli.parse, ['path/fake.story', '--ignore',
                               'path/sub_dir/my_fake.story'])
-    App.parse.assert_called_with('path/fake.story', ebnf=None,
+    App.parse.assert_called_with(path='path/fake.story', ebnf=None,
                                  ignored_path='path/sub_dir/my_fake.story',
                                  lower=False, features={})
 
@@ -117,7 +125,7 @@ def test_cli_parse(runner, echo, app, tree):
     """
     App.parse.return_value = {'path': tree}
     runner.invoke(Cli.parse, [])
-    App.parse.assert_called_with('.', ebnf=None,
+    App.parse.assert_called_with(path='.', ebnf=None,
                                  ignored_path=None, lower=False, features={})
     click.echo.assert_called_with(tree.pretty())
 
@@ -136,7 +144,7 @@ def test_cli_parse_path(runner, echo, app):
     Ensures the parse command supports specifying a path.
     """
     runner.invoke(Cli.parse, ['/path'])
-    App.parse.assert_called_with('/path', ebnf=None,
+    App.parse.assert_called_with(path='/path', ebnf=None,
                                  ignored_path=None, lower=False, features={})
 
 
@@ -145,7 +153,7 @@ def test_cli_parse_ebnf(runner, echo, app):
     Ensures the parse command supports specifying an ebnf file.
     """
     runner.invoke(Cli.parse, ['--ebnf', 'test.ebnf'])
-    App.parse.assert_called_with('.', ebnf='test.ebnf',
+    App.parse.assert_called_with(path='.', ebnf='test.ebnf',
                                  ignored_path=None, lower=False, features={})
 
 
@@ -154,7 +162,7 @@ def test_cli_parse_lower(runner, echo, app):
     Ensures the parse command supports lowering
     """
     runner.invoke(Cli.parse, ['--lower'])
-    App.parse.assert_called_with('.', ebnf=None,
+    App.parse.assert_called_with(path='.', ebnf=None,
                                  ignored_path=None, lower=True, features={})
 
 
@@ -163,7 +171,7 @@ def test_cli_parse_features(runner, echo, app):
     Ensures the parse command accepts features
     """
     runner.invoke(Cli.parse, ['--preview=globals'])
-    App.parse.assert_called_with('.', ebnf=None,
+    App.parse.assert_called_with(path='.', ebnf=None,
                                  ignored_path=None, lower=False,
                                  features={'globals': True})
 
@@ -173,7 +181,7 @@ def test_cli_parse_features_positive(runner, echo, app):
     Ensures the parse command accepts positive features
     """
     runner.invoke(Cli.parse, ['--preview=+globals'])
-    App.parse.assert_called_with('.', ebnf=None,
+    App.parse.assert_called_with(path='.', ebnf=None,
                                  ignored_path=None, lower=False,
                                  features={'globals': True})
 
@@ -183,7 +191,7 @@ def test_cli_parse_features_negative(runner, echo, app):
     Ensures the parse command accepts negative features
     """
     runner.invoke(Cli.parse, ['--preview=-globals'])
-    App.parse.assert_called_with('.', ebnf=None,
+    App.parse.assert_called_with(path='.', ebnf=None,
                                  ignored_path=None, lower=False,
                                  features={'globals': False})
 
@@ -193,7 +201,7 @@ def test_cli_parse_features_chain(runner, echo, app):
     Ensures the parse command accepts feature chains
     """
     runner.invoke(Cli.parse, ['--preview=globals', '--preview=-globals'])
-    App.parse.assert_called_with('.', ebnf=None,
+    App.parse.assert_called_with(path='.', ebnf=None,
                                  ignored_path=None, lower=False,
                                  features={'globals': False})
 
@@ -259,13 +267,21 @@ def test_cli_parse_not_found(runner, echo, app, patch):
     click.echo.assert_called_with(StoryError.message())
 
 
+def test_cli_parse_story_string(runner, app, echo, stdin, tree):
+    App.parse.return_value = {'path': tree}
+    runner.invoke(Cli.parse, [], input=stdin)
+    App.parse.assert_called_with(story=stdin, ebnf=None,
+                                 lower=False, features={})
+    click.echo.assert_called_with(tree.pretty())
+
+
 def test_cli_compile(patch, runner, echo, app):
     """
     Ensures the compile command compiles a story.
     """
     patch.object(click, 'style')
     runner.invoke(Cli.compile, [])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
     click.style.assert_called_with('Script syntax passed!', fg='green')
@@ -277,7 +293,7 @@ def test_cli_compile_path(patch, runner, app):
     Ensures the compile command supports specifying a path
     """
     runner.invoke(Cli.compile, ['/path'])
-    App.compile.assert_called_with('/path', ebnf=None,
+    App.compile.assert_called_with(path='/path', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
 
@@ -298,7 +314,7 @@ def test_cli_compile_silent(runner, echo, app, option):
     Ensures --silent makes everything quiet
     """
     result = runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
     assert result.output == ''
@@ -311,7 +327,7 @@ def test_cli_compile_concise(runner, echo, app, option):
     Ensures --concise makes everything concise
     """
     runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=True,
                                    first=False, features={})
 
@@ -322,21 +338,21 @@ def test_cli_compile_first(runner, echo, app, option):
     Ensures --first only yields the first story
     """
     runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=True, features={})
 
 
 def test_cli_compile_debug(runner, echo, app):
     runner.invoke(Cli.compile, ['--debug'])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
 
 
 def test_cli_compile_features(runner, echo, app):
     runner.invoke(Cli.compile, ['--preview=globals'])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={'globals': True})
 
@@ -347,7 +363,7 @@ def test_cli_compile_json(runner, echo, app, option):
     Ensures --json outputs json
     """
     runner.invoke(Cli.compile, [option])
-    App.compile.assert_called_with('.', ebnf=None,
+    App.compile.assert_called_with(path='.', ebnf=None,
                                    ignored_path=None, concise=False,
                                    first=False, features={})
     click.echo.assert_called_with(App.compile())
@@ -355,7 +371,7 @@ def test_cli_compile_json(runner, echo, app, option):
 
 def test_cli_compile_ebnf(runner, echo, app):
     runner.invoke(Cli.compile, ['--ebnf', 'test.ebnf'])
-    App.compile.assert_called_with('.', ebnf='test.ebnf',
+    App.compile.assert_called_with(path='.', ebnf='test.ebnf',
                                    ignored_path=None, concise=False,
                                    first=False, features={})
 
@@ -406,6 +422,15 @@ def test_cli_compile_not_found_debug(runner, echo, app):
     assert e.exception.message() == 'Unknown compiler error'
 
 
+def test_cli_compile_story_string(patch, runner, echo, app, stdin):
+    patch.object(click, 'style')
+    runner.invoke(Cli.compile, [], input=stdin)
+    App.compile.assert_called_with(story=stdin, ebnf=None, concise=False,
+                                   first=False, features={})
+    click.style.assert_called_with('Script syntax passed!', fg='green')
+    click.echo.assert_called_with(click.style())
+
+
 def test_cli_lex(patch, magic, runner, app, echo):
     """
     Ensures the lex command outputs lexer tokens
@@ -413,7 +438,7 @@ def test_cli_lex(patch, magic, runner, app, echo):
     token = magic(type='token', value='value')
     patch.object(App, 'lex', return_value={'one.story': [token]})
     runner.invoke(Cli.lex, [])
-    App.lex.assert_called_with('.', ebnf=None, features={})
+    App.lex.assert_called_with(path='.', ebnf=None, features={})
     click.echo.assert_called_with('0 token value')
     assert click.echo.call_count == 2
 
@@ -424,7 +449,7 @@ def test_cli_lex_path(patch, magic, runner, app):
     """
     patch.object(App, 'lex', return_value={'one.story': [magic()]})
     runner.invoke(Cli.lex, ['/path'])
-    App.lex.assert_called_with('/path', ebnf=None, features={})
+    App.lex.assert_called_with(path='/path', ebnf=None, features={})
 
 
 def test_cli_lex_ebnf(patch, runner):
@@ -433,7 +458,7 @@ def test_cli_lex_ebnf(patch, runner):
     """
     patch.object(App, 'lex')
     runner.invoke(Cli.lex, ['--ebnf', 'my.ebnf'])
-    App.lex.assert_called_with('.', ebnf='my.ebnf', features={})
+    App.lex.assert_called_with(path='.', ebnf='my.ebnf', features={})
 
 
 def test_cli_lex_features(patch, runner):
@@ -442,7 +467,7 @@ def test_cli_lex_features(patch, runner):
     """
     patch.object(App, 'lex')
     runner.invoke(Cli.lex, ['--preview=globals'])
-    App.lex.assert_called_with('.', ebnf=None,
+    App.lex.assert_called_with(path='.', ebnf=None,
                                features={'globals': True})
 
 
@@ -495,6 +520,15 @@ def test_cli_lex_not_found_debug(patch, runner, echo, app):
     assert e.exception.message() == 'Unknown compiler error'
 
 
+def test_cli_lex_story_string(patch, magic, runner, echo, app, stdin):
+    token = magic(type='token', value='value')
+    patch.object(App, 'lex', return_value={'one.story': [token]})
+    runner.invoke(Cli.lex, [], input=stdin)
+    App.lex.assert_called_with(story=stdin, ebnf=None, features={})
+    click.echo.assert_called_with('0 token value')
+    assert click.echo.call_count == 2
+
+
 def test_cli_grammar(patch, runner, app, echo):
     patch.object(App, 'grammar')
     runner.invoke(Cli.grammar, [])
@@ -529,7 +563,7 @@ def test_cli_format(runner, echo, app):
     """
     App.format.return_value = '.format.'
     runner.invoke(Cli.format, ['foo-path'])
-    App.format.assert_called_with('foo-path', ebnf=None, features={},
+    App.format.assert_called_with(path='foo-path', ebnf=None, features={},
                                   inplace=False)
     click.echo.assert_called_with('.format.')
 
@@ -540,9 +574,10 @@ def test_cli_format_no_file(runner, echo, app):
     """
     App.format.return_value = '.format.'
     e = runner.invoke(Cli.format, [])
-    App.format.assert_not_called()
-    assert e.exit_code == 2
-    click.echo.assert_not_called()
+    App.format.assert_called_with(path='.', ebnf=None, features={},
+                                  inplace=False)
+    assert e.exit_code == 0
+    click.echo.assert_called_with('.format.')
 
 
 def test_cli_format_ebnf(runner, echo, app):
@@ -550,8 +585,8 @@ def test_cli_format_ebnf(runner, echo, app):
     Ensures the format command supports specifying an ebnf file.
     """
     runner.invoke(Cli.format, ['foo-path', '--ebnf', 'test.ebnf'])
-    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={},
-                                  inplace=False)
+    App.format.assert_called_with(path='foo-path', ebnf='test.ebnf',
+                                  features={}, inplace=False)
 
 
 def test_cli_format_ice(patch, runner, echo, app):
@@ -609,7 +644,7 @@ def test_cli_format_features(patch, runner):
     """
     patch.object(App, 'format')
     runner.invoke(Cli.format, ['--preview=globals', '/a/file'])
-    App.format.assert_called_with('/a/file', ebnf=None, inplace=False,
+    App.format.assert_called_with(path='/a/file', ebnf=None, inplace=False,
                                   features={'globals': True})
 
 
@@ -619,5 +654,12 @@ def test_cli_format_inplace(runner, echo, app, option):
     Ensures the format command supports inplace updates.
     """
     runner.invoke(Cli.format, ['foo-path', option, '--ebnf', 'test.ebnf'])
-    App.format.assert_called_with('foo-path', ebnf='test.ebnf', features={},
-                                  inplace=True)
+    App.format.assert_called_with(path='foo-path', ebnf='test.ebnf',
+                                  features={}, inplace=True)
+
+
+def test_cli_format_story_string(runner, echo, app, stdin):
+    App.format.return_value = '.format.'
+    runner.invoke(Cli.format, ['foo-path'], input=stdin)
+    App.format.assert_called_with(story=stdin, ebnf=None, features={})
+    click.echo.assert_called_with('.format.')

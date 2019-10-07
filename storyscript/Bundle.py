@@ -92,6 +92,15 @@ class Bundle:
         bundle.load_story(path)
         return bundle
 
+    @classmethod
+    def from_string(cls, story, features=None):
+        """
+        Load a story from a given string into `story` filepath.
+        """
+        bundle = Bundle(features=features)
+        bundle.story_files['.story'] = story
+        return bundle
+
     def load_story(self, path):
         """
         Reads a story file and adds it to the loaded stories

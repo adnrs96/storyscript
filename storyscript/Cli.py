@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import io
+import os
+import sys
 
 import click
 
@@ -79,8 +81,13 @@ class Cli:
         Parses stories, producing the abstract syntax tree.
         """
         try:
-            trees = App.parse(path, ignored_path=ignore, ebnf=ebnf,
-                              lower=lower, features=preview)
+            if not os.isatty(0):
+                story = sys.stdin.read()
+                trees = App.parse(story=story, ebnf=ebnf,
+                                  lower=lower, features=preview)
+            else:
+                trees = App.parse(path=path, ignored_path=ignore, ebnf=ebnf,
+                                  lower=lower, features=preview)
             for story, tree in trees.items():
                 click.echo('File: {}'.format(story))
                 if raw:
@@ -102,7 +109,7 @@ class Cli:
 
     @staticmethod
     @main.command(aliases=['f'])
-    @click.argument('path')
+    @click.argument('path', default='.')
     @click.option('--debug', is_flag=True)
     @click.option('--inplace', '-i', is_flag=True, help=inplace_help)
     @click.option('--ebnf', help=ebnf_help)
@@ -113,8 +120,12 @@ class Cli:
         Format a story.
         """
         try:
-            output = App.format(path, ebnf=ebnf, features=preview,
-                                inplace=inplace)
+            if not os.isatty(0):
+                story = sys.stdin.read()
+                output = App.format(story=story, ebnf=ebnf, features=preview)
+            else:
+                output = App.format(path=path, ebnf=ebnf, features=preview,
+                                    inplace=inplace)
             if not inplace:
                 click.echo(output)
         except StoryError as e:
@@ -150,9 +161,16 @@ class Cli:
         Compiles stories and validates syntax
         """
         try:
-            results = App.compile(path, ignored_path=ignore,
-                                  ebnf=ebnf, concise=concise, first=first,
-                                  features=preview)
+            if not os.isatty(0):
+                story = sys.stdin.read()
+                results = App.compile(story=story, ebnf=ebnf,
+                                      concise=concise, first=first,
+                                      features=preview)
+            else:
+                results = App.compile(path=path, ignored_path=ignore,
+                                      ebnf=ebnf, concise=concise, first=first,
+                                      features=preview)
+
             if not silent:
                 if json:
                     if output:
@@ -188,7 +206,11 @@ class Cli:
         Shows lexer tokens for given stories
         """
         try:
-            results = App.lex(path, ebnf=ebnf, features=preview)
+            if not os.isatty(0):
+                story = sys.stdin.read()
+                results = App.lex(story=story, ebnf=ebnf, features=preview)
+            else:
+                results = App.lex(path=path, ebnf=ebnf, features=preview)
             for file, tokens in results.items():
                 click.echo('File: {}'.format(file))
                 for n, token in enumerate(tokens):

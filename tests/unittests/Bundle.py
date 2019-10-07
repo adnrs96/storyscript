@@ -141,6 +141,12 @@ def test_bundle_from_path(patch):
     assert isinstance(result, Bundle)
 
 
+def test_bundle_from_string():
+    result = Bundle.from_string('story')
+    assert isinstance(result, Bundle)
+    assert result.find_stories() == ['.story']
+
+
 def test_bundle_from_path_directory(patch):
     """
     Ensures Bundle.from_path can create a Bundle from a directory path
