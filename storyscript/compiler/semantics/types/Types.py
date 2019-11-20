@@ -470,8 +470,9 @@ class ListType(BaseType):
         return None
 
     def implicit_to(self, other):
-        if self == other:
-            return self
+        s = super().implicit_to(other)
+        if s is not None:
+            return s
         if not isinstance(other, ListType):
             return None
         im_to = self.inner.implicit_to(other.inner)
@@ -540,8 +541,9 @@ class MapType(BaseType):
         return None
 
     def implicit_to(self, other):
-        if self == other:
-            return self
+        s = super().implicit_to(other)
+        if s is not None:
+            return s
         if not isinstance(other, MapType):
             return None
         im_key = self.key.implicit_to(other.key)
