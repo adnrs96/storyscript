@@ -1,0 +1,157 @@
+{
+  "tree": {
+    "1": {
+      "method": "function",
+      "ln": "1",
+      "col_start": "1",
+      "col_end": "12",
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "bar",
+          "arg": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "List",
+                "values": [
+                  {
+                    "$OBJECT": "type",
+                    "type": "any"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "enter": "2",
+      "exit": "4",
+      "src": "function foo bar: List[List[any]]",
+      "next": "4"
+    },
+    "2": {
+      "method": "expression",
+      "ln": "2",
+      "col_start": "5",
+      "col_end": "12",
+      "name": [
+        "a"
+      ],
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "bar"
+          ]
+        }
+      ],
+      "parent": "1",
+      "src": "    a = bar"
+    },
+    "4": {
+      "method": "expression",
+      "ln": "4",
+      "col_start": "1",
+      "col_end": "31",
+      "name": [
+        "bar"
+      ],
+      "args": [
+        {
+          "$OBJECT": "type_cast",
+          "type": {
+            "$OBJECT": "type",
+            "type": "List",
+            "values": [
+              {
+                "$OBJECT": "type",
+                "type": "List",
+                "values": [
+                  {
+                    "$OBJECT": "type",
+                    "type": "List",
+                    "values": [
+                      {
+                        "$OBJECT": "type",
+                        "type": "any"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "value": {
+            "$OBJECT": "list",
+            "items": []
+          }
+        }
+      ],
+      "src": "bar = [] to List[List[List[any]]]",
+      "next": "5.1"
+    },
+    "5.1": {
+      "method": "call",
+      "ln": "5.1",
+      "col_start": "1",
+      "col_end": "9",
+      "name": [
+        "__p-5.1"
+      ],
+      "function": "foo",
+      "args": [
+        {
+          "$OBJECT": "arg",
+          "name": "bar",
+          "arg": {
+            "$OBJECT": "type_cast",
+            "type": {
+              "$OBJECT": "type",
+              "type": "List",
+              "values": [
+                {
+                  "$OBJECT": "type",
+                  "type": "List",
+                  "values": [
+                    {
+                      "$OBJECT": "type",
+                      "type": "any"
+                    }
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "$OBJECT": "path",
+              "paths": [
+                "bar"
+              ]
+            }
+          }
+        }
+      ],
+      "next": "5"
+    },
+    "5": {
+      "method": "expression",
+      "ln": "5",
+      "args": [
+        {
+          "$OBJECT": "path",
+          "paths": [
+            "__p-5.1"
+          ]
+        }
+      ],
+      "src": "foo(:bar)"
+    }
+  },
+  "entrypoint": "1",
+  "functions": {
+    "foo": "1"
+  }
+}
