@@ -36,7 +36,7 @@
       "col_start": "5",
       "col_end": "17",
       "enter": "4",
-      "exit": "6",
+      "exit": "9",
       "parent": "1",
       "src": "    try",
       "next": "6"

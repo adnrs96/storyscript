@@ -36,7 +36,7 @@
       "col_start": "5",
       "col_end": "29",
       "enter": "4",
-      "exit": "5",
+      "exit": "16",
       "parent": "1",
       "src": "    try",
       "next": "5"
@@ -92,7 +92,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "8",
-      "exit": "10",
       "parent": "5",
       "src": "        try",
       "next": "10"
@@ -161,7 +160,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "11",
-      "exit": "13",
       "parent": "5",
       "src": "        catch",
       "next": "13"
@@ -230,7 +228,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "14",
-      "exit": "16",
       "parent": "5",
       "src": "        finally"
     },

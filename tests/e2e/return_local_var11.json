@@ -65,7 +65,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "6",
-      "exit": "8",
       "parent": "3",
       "src": "        try",
       "next": "8"
@@ -134,7 +133,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "9",
-      "exit": "11",
       "parent": "3",
       "src": "        catch",
       "next": "11"
@@ -203,7 +201,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "12",
-      "exit": "14",
       "parent": "3",
       "src": "        finally"
     },

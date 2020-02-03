@@ -42,7 +42,7 @@
         }
       ],
       "enter": "4",
-      "exit": "6",
+      "exit": "11",
       "parent": "1",
       "src": "    if true",
       "next": "6"
@@ -103,7 +103,7 @@
         }
       ],
       "enter": "7",
-      "exit": "8",
+      "exit": "11",
       "parent": "1",
       "src": "    else if 1 == 2",
       "next": "8"

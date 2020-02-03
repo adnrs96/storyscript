@@ -113,7 +113,7 @@
         }
       ],
       "enter": "8",
-      "exit": "9",
+      "exit": "12",
       "src": "if a > 0",
       "next": "9"
     },
@@ -200,7 +200,7 @@
       "col_start": "1",
       "col_end": "10",
       "enter": "16",
-      "exit": "17",
+      "exit": "20",
       "src": "try",
       "next": "17"
     },

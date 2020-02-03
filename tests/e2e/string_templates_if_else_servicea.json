@@ -337,7 +337,6 @@
         }
       ],
       "enter": "2",
-      "exit": "3",
       "src": "if (random list length: 10 type: \"string\") == (random list length: (random integer low:1 high:10) type: \"{random string length: ((random boolean) to int)}\")",
       "next": "3"
     },

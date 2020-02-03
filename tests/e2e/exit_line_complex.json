@@ -125,7 +125,7 @@
         }
       ],
       "enter": "5",
-      "exit": "6",
+      "exit": "8",
       "parent": "3",
       "src": "    if label[\"name\"] == \"a\" or label[\"name\"] == \"b\"",
       "next": "6"
@@ -189,7 +189,6 @@
         }
       ],
       "enter": "9",
-      "exit": "10",
       "parent": "3",
       "src": "    if found"
     },

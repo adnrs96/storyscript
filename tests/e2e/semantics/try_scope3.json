@@ -6,7 +6,7 @@
       "col_start": "1",
       "col_end": "10",
       "enter": "2",
-      "exit": "3",
+      "exit": "7",
       "src": "try",
       "next": "3"
     },
@@ -33,7 +33,7 @@
       "col_start": "1",
       "col_end": "10",
       "enter": "4",
-      "exit": "5",
+      "exit": "7",
       "src": "catch",
       "next": "5"
     },

@@ -83,7 +83,7 @@
         }
       ],
       "enter": "2",
-      "exit": "3",
+      "exit": "8",
       "src": "if (random integer low: 0 high: 10) == 1",
       "next": "3"
     },
@@ -127,7 +127,7 @@
         }
       ],
       "enter": "4",
-      "exit": "5",
+      "exit": "8",
       "src": "else if (random integer low: 1 high: 20) == 2",
       "next": "5"
     },

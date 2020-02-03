@@ -6,7 +6,6 @@
       "col_start": "1",
       "col_end": "11",
       "enter": "2",
-      "exit": "3",
       "src": "try",
       "next": "3"
     },

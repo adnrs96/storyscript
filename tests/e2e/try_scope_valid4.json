@@ -23,7 +23,7 @@
       "col_start": "1",
       "col_end": "9",
       "enter": "3",
-      "exit": "4",
+      "exit": "9",
       "src": "try",
       "next": "4"
     },
@@ -62,7 +62,7 @@
       "col_start": "1",
       "col_end": "9",
       "enter": "5",
-      "exit": "6",
+      "exit": "9",
       "src": "catch",
       "next": "6"
     },

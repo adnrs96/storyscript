@@ -44,7 +44,6 @@
         }
       ],
       "enter": "3",
-      "exit": "4",
       "parent": "1",
       "src": "    if n == 1",
       "next": "4"

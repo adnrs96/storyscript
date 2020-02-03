@@ -26,7 +26,7 @@
         }
       ],
       "enter": "3",
-      "exit": "4",
+      "exit": "14",
       "parent": "1",
       "src": "    if true",
       "next": "4"
@@ -56,7 +56,6 @@
       "col_start": "9",
       "col_end": "25",
       "enter": "6",
-      "exit": "14",
       "parent": "4",
       "src": "        try"
     },
@@ -72,7 +71,6 @@
         }
       ],
       "enter": "7",
-      "exit": "14",
       "parent": "5",
       "src": "            while true"
     },
@@ -88,7 +86,7 @@
         }
       ],
       "enter": "8",
-      "exit": "9",
+      "exit": "13",
       "parent": "6",
       "src": "                if true",
       "next": "9"
@@ -160,7 +158,6 @@
         }
       ],
       "enter": "12",
-      "exit": "13",
       "parent": "9",
       "src": "                    foreach a as x"
     },

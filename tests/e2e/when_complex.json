@@ -118,7 +118,6 @@
         }
       ],
       "enter": "7",
-      "exit": "9",
       "parent": "1",
       "src": "    when tweet track: \"storyscript\" as t"
     },

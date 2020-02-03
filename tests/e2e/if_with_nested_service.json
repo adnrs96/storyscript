@@ -397,7 +397,7 @@
         }
       ],
       "enter": "2",
-      "exit": "3",
+      "exit": "8",
       "src": "if (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20)) == (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20))",
       "next": "3"
     },
@@ -443,7 +443,7 @@
         }
       ],
       "enter": "4",
-      "exit": "5",
+      "exit": "8",
       "src": "else if (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20)) == (random integer low: (random integer low: 1 high: 10) high: (random integer low: 10 high: 20))",
       "next": "5"
     },

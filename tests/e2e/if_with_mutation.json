@@ -76,7 +76,7 @@
         }
       ],
       "enter": "3",
-      "exit": "4",
+      "exit": "9",
       "src": "if a.isOdd()",
       "next": "4"
     },
@@ -110,7 +110,7 @@
         }
       ],
       "enter": "5",
-      "exit": "6",
+      "exit": "9",
       "src": "else if a.isEven()",
       "next": "6"
     },

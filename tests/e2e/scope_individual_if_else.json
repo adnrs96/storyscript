@@ -12,7 +12,6 @@
         }
       ],
       "enter": "2",
-      "exit": "3",
       "src": "if true",
       "next": "3"
     },

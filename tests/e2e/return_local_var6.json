@@ -77,7 +77,6 @@
         }
       ],
       "enter": "6",
-      "exit": "8",
       "parent": "3",
       "src": "        if true",
       "next": "8"
@@ -152,7 +151,6 @@
         }
       ],
       "enter": "9",
-      "exit": "11",
       "parent": "3",
       "src": "        else if true",
       "next": "11"
@@ -221,7 +219,6 @@
       "col_start": "9",
       "col_end": "29",
       "enter": "12",
-      "exit": "14",
       "parent": "3",
       "src": "        else"
     },

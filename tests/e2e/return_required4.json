@@ -55,7 +55,6 @@
         }
       ],
       "enter": "4",
-      "exit": "5",
       "parent": "1",
       "src": "    if true",
       "next": "5"
@@ -86,7 +85,6 @@
         }
       ],
       "enter": "6",
-      "exit": "7",
       "parent": "1",
       "src": "    else if true",
       "next": "7"
