@@ -17,7 +17,7 @@ class Lines:
         self.output_scopes = []
         self.scopes = []
         self.previous_scope = None
-        self.finished_scopes = []
+        self.finished_scopes_stack = [[]]
 
     def entrypoint(self):
         """
@@ -78,6 +78,7 @@ class Lines:
         nested children.
         """
         self.scopes.append(line)
+        self.finished_scopes_stack.append([])
         # initially a new scope starts without a next reference
         self.previous_scope = "NO_NEXT"
         self.output_scopes.append({line: {"parent": parent, "output": output}})
@@ -88,7 +89,8 @@ class Lines:
         when the next line gets added.
         """
         self.previous_scope = self.scopes.pop()
-        self.finished_scopes.append(self.previous_scope)
+        self.finished_scopes_stack.pop()
+        self.finished_scopes_stack[-1].append(self.previous_scope)
         self.output_scopes.pop()
 
     def is_output(self, parent, service):
@@ -155,10 +157,16 @@ class Lines:
         if "." in service:
             raise StorySyntaxError("service_name")
 
+    def set_exit(self, method, line):
+        if method in ["else", "elif", "catch", "finally"]:
+            return
+
+        for scope in self.finished_scopes_stack[-1]:
+            self.lines[scope]["exit"] = line
+        self.finished_scopes_stack[-1] = []
+
     def append(self, method, position, **kwargs):
-        for scope in self.finished_scopes:
-            self.lines[scope]["exit"] = position.line
-        self.finished_scopes = []
+        self.set_exit(method, position.line)
         if "service" in kwargs:
             self.check_service_name(kwargs["service"], position.line)
 

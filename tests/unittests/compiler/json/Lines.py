@@ -71,10 +71,11 @@ def test_lines_set_scope_output(lines):
 def test_lines_finish_scope(lines):
     lines.scopes = ["1", "2"]
     lines.output_scopes = [1, 2]
+    lines.finished_scopes_stack.extend([[], []])
     lines.finish_scope(".")
-    assert lines.finished_scopes == ["2"]
+    assert lines.finished_scopes_stack == [[], ["2"]]
     lines.finish_scope(".")
-    assert lines.finished_scopes == ["2", "1"]
+    assert lines.finished_scopes_stack == [["1"]]
 
 
 def test_lines_is_output(lines):
@@ -218,7 +219,7 @@ def test_lines_append_scope(patch, lines):
     Ensures that 'exit' is set properly after a scope was left.
     """
     patch.many(Lines, ["make", "set_next"])
-    lines.finished_scopes = ["1"]
+    lines.finished_scopes_stack = [["1"]]
     lines.lines["1"] = {}
     lines.append("method", position_fixed, extras="whatever")
     lines.set_next.assert_called_with("1")
