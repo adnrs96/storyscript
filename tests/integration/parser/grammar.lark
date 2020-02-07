@@ -117,7 +117,7 @@ FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
 SINGLE_QUOTED: /'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/
 DOUBLE_QUOTED: /"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/
 DOUBLE_QUOTED_HEREDOC.2: /"""(.|\n)*?"""/
-REGEXP.10: /\/([^\/\n]*)\/g?i?m?s?u?y?/
+REGEXP.10: /\/([^\/\n]+)\/g?i?m?s?u?y?/
 NAME.1: /[a-zA-Z_][-\w]*(\/[-\w]+)?(?<![-\/])/
 RAW_TIME.3: /([0-9]+(ms|[smhdw]))+/
 OCB: "{"
@@ -145,7 +145,7 @@ LESSER_EQUAL: "<="
 NOT_EQUAL: "!="
 EQUAL: "=="
 BSLASH.5: "/"
-MULTIPLIER: "*"
+MULTIPLIER.5: "*"
 MODULUS.5: "%"
 PLUS.5: "+"
 DASH.5: "-"
@@ -164,11 +164,13 @@ CATCH: "catch"
 FINALLY: "finally"
 THROW: "throw"
 _WHEN: "when"
-SINGLE_LINE_COMMENT: /(\r?\n)?\s*#[^\n\r]*/
-MULTI_LINE_COMMENT: /(\r?\n)?\s*#+##[^#](.|\n)*?###[^\n\r]*/
+SHORT_COMMENT.6: /(\r?\n)?\s*\/\/[^\n\r]*/
+INLINE_COMMENT.6: /\s\/\/[^\n\r]*/
+LONG_COMMENT.6: /(\r?\n)?\s*\/\*(.|\n)*?\*\//
 
 %ignore _WS
-%ignore SINGLE_LINE_COMMENT
-%ignore MULTI_LINE_COMMENT
+%ignore SHORT_COMMENT
+%ignore INLINE_COMMENT
+%ignore LONG_COMMENT
 
 

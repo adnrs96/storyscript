@@ -26,7 +26,7 @@
         }
       ],
       "parent": "1",
-      "src": "  return 28  # Assume some RNG here"
+      "src": "  return 28  // Assume some RNG here"
     },
     "4": {
       "method": "function",
@@ -72,7 +72,7 @@
         }
       ],
       "parent": "4",
-      "src": "  return 28  # Assume some RNG here"
+      "src": "  return 28  // Assume some RNG here"
     },
     "7.1": {
       "method": "call",
