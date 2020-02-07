@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 2
+Error: syntax error in story at line 1, column 1
 
 1|    a//a = 1
-       ^
+      ^
 
-E0007: Missing value after `=`
+E0052: Service calls require a command.

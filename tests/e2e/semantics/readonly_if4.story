@@ -1,4 +1,4 @@
-# FEAT: globals=False
+// FEAT: globals=False
 if true
     a = 1
 else if true

@@ -26,7 +26,7 @@
         }
       ],
       "parent": "1",
-      "src": "  return \"abc@xyz.com\"  # Assume some RNG here"
+      "src": "  return \"abc@xyz.com\"  // Assume some RNG here"
     },
     "4": {
       "method": "function",
@@ -100,7 +100,7 @@
         }
       ],
       "parent": "4",
-      "src": "  return k1 to string +k2 to string  # Assume some RNG here"
+      "src": "  return k1 to string +k2 to string  // Assume some RNG here"
     },
     "7.1": {
       "method": "call",
