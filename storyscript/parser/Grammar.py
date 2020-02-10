@@ -211,6 +211,17 @@ class Grammar:
         self.ebnf.THROW = "throw"
         self.ebnf.throw_statement = "throw entity?"
 
+    def comments(self):
+        self.ebnf.set_token("SHORT_COMMENT.6", r"/(\r?\n)?\s*\/\/[^\n\r]*/")
+        self.ebnf.ignore("SHORT_COMMENT")
+        self.ebnf.set_token("INLINE_COMMENT.6", r"/\s\/\/[^\n\r]*/")
+        self.ebnf.ignore("INLINE_COMMENT")
+        self.ebnf.set_token(
+            "LONG_COMMENT.6",
+            r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/",
+        )
+        self.ebnf.ignore("LONG_COMMENT")
+
     def rules(self):
         self.ebnf.RETURN = "return"
         self.ebnf.BREAK = "break"
@@ -319,6 +330,7 @@ class Grammar:
         self.values()
         self.assignments()
         self.expressions()
+        self.comments()
         self.rules()
         self.service_block()
         self.call_expression()
@@ -331,14 +343,5 @@ class Grammar:
         self.block()
         self.ebnf.start = "nl? block*"
         self.ebnf.ignore("_WS")
-        self.ebnf.set_token("SHORT_COMMENT.6", r"/(\r?\n)?\s*\/\/[^\n\r]*/")
-        self.ebnf.ignore("SHORT_COMMENT")
-        self.ebnf.set_token("INLINE_COMMENT.6", r"/\s\/\/[^\n\r]*/")
-        self.ebnf.ignore("INLINE_COMMENT")
-        self.ebnf.set_token(
-            "LONG_COMMENT.6",
-            r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/",
-        )
-        self.ebnf.ignore("LONG_COMMENT")
 
         return self.ebnf.build()
