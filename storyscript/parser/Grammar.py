@@ -335,7 +335,10 @@ class Grammar:
         self.ebnf.ignore("SHORT_COMMENT")
         self.ebnf.set_token("INLINE_COMMENT.6", r"/\s\/\/[^\n\r]*/")
         self.ebnf.ignore("INLINE_COMMENT")
-        self.ebnf.set_token("LONG_COMMENT.6", r"/(\r?\n)?\s*\/\*(.|\n)*?\*\//")
+        self.ebnf.set_token(
+            "LONG_COMMENT.6",
+            r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/",
+        )
         self.ebnf.ignore("LONG_COMMENT")
 
         return self.ebnf.build()

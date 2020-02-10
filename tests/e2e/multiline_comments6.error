@@ -1,0 +1,6 @@
+Error: syntax error in story at line 2, column 1
+
+2|    /* b = 0
+      ^
+
+E0041: `/` is not allowed here
