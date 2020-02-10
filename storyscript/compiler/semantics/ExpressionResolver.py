@@ -648,6 +648,9 @@ class ExpressionResolver:
     def call_expression(self, tree):
         return self.resolve_function(tree)
 
+    def data_expression(self, tree):
+        return base_symbol(AnyType.instance())
+
     def base_expression(self, tree):
         """
         Compiles an soon to be expression object with the given tree.
@@ -662,6 +665,8 @@ class ExpressionResolver:
             return self.mutation(child)
         elif child.data == "call_expression":
             return self.call_expression(child)
+        elif child.data == "data_expression":
+            return self.data_expression(child)
         else:
             assert child.data == "path"
             return self.path(child)

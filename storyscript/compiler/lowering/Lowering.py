@@ -53,6 +53,8 @@ class Lowering:
         elif node.call_expression is not None:
             assert node.call_expression is not None
             child_node = node.call_expression
+        elif node.data_expression is not None:
+            child_node = node.data_expression
         else:
             assert node.mutation is not None
             child_node = node.mutation

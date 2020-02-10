@@ -92,7 +92,8 @@ class Grammar:
         self.ebnf.map = self.ebnf.collection(*map_)
         self.ebnf.regular_expression = "regexp"
         self.ebnf.inline_expression = (
-            "op inline_service cp, " "call_expression"
+            "op inline_service cp, " "call_expression, "
+            "op data_expression cp"
         )
         self.ebnf.value_fragment = "osb expression csb"
         values = (
@@ -205,7 +206,7 @@ class Grammar:
         self.ebnf.absolute_expression = "expression"
         # service calls don't need parentheses when they are at
         # the base,e.g. `if my_service commmand`
-        self.ebnf.base_expression = "(expression, inline_service)"
+        self.ebnf.base_expression = "(expression, inline_service, data_expression)"
 
     def throw_statement(self):
         self.ebnf.THROW = "throw"
@@ -238,6 +239,12 @@ class Grammar:
         self.ebnf.service = "path service_fragment"
         self.ebnf.service_block = "service nl (nested_block)?"
         self.ebnf.inline_service = "path inline_service_fragment"
+
+    def data_expression(self):
+        self.ebnf._HASH = "#"
+        self.ebnf.table = "name"
+        self.ebnf.data_fragment = "command arguments*"
+        self.ebnf.data_expression = "hash table data_fragment"
 
     def call_expression(self):
         self.ebnf.call_expression = (
@@ -329,6 +336,7 @@ class Grammar:
         self.try_block()
         self.throw_statement()
         self.block()
+        self.data_expression()
         self.ebnf.start = "nl? block*"
         self.ebnf.ignore("_WS")
         self.ebnf.set_token("SHORT_COMMENT.6", r"/(\r?\n)?\s*\/\/[^\n\r]*/")

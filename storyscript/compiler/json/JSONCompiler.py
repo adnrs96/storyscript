@@ -93,6 +93,8 @@ class JSONCompiler:
             args = [self.objects.expression(tree.expression)]
             self.lines.append("expression", position, args=args, parent=parent)
             return
+        elif tree.data_expression:
+            return
         else:
             internal_assert(tree.call_expression)
             exp = tree.call_expression
