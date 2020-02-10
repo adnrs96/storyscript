@@ -221,6 +221,10 @@ class Grammar:
             r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/",
         )
         self.ebnf.ignore("LONG_COMMENT")
+        self.ebnf.set_token(
+            "INVALID_LONG_COMMENT.5", r"/[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/",
+        )
+        self.ebnf.invalid_comment = "invalid_long_comment"
 
     def rules(self):
         self.ebnf.RETURN = "return"
@@ -233,7 +237,7 @@ class Grammar:
         rules = (
             "absolute_expression, assignment, return_statement, "
             "throw_statement, break_statement, continue_statement, "
-            "block"
+            "block, invalid_comment"
         )
         self.ebnf.rules = rules
 

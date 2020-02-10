@@ -46,11 +46,12 @@ or_expression: (or_expression or_operator)? and_expression
 expression: or_expression
 absolute_expression: expression
 base_expression: (expression| inline_service)
+invalid_comment: INVALID_LONG_COMMENT
 return_statement: RETURN base_expression?
 break_statement: BREAK
 continue_statement: CONTINUE
 entity: values| path
-rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block
+rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block| invalid_comment
 command: NAME
 arguments: NAME? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)
@@ -153,6 +154,7 @@ FLOAT_MUT.5: FLOAT NAME "("
 SHORT_COMMENT.6: /(\r?\n)?\s*\/\/[^\n\r]*/
 INLINE_COMMENT.6: /\s\/\/[^\n\r]*/
 LONG_COMMENT.6: /(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/
+INVALID_LONG_COMMENT.5: /[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/
 RETURN: "return"
 BREAK: "break"
 CONTINUE: "continue"
