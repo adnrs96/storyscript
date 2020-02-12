@@ -61,7 +61,7 @@ class PrettyPrinter:
         Compiles an assignment tree.
         """
         if tree.path:
-            lhs = self.objects.names(tree.path)[0]
+            lhs = self.join_names(self.objects.names(tree.path))
         else:
             assert tree.assignment_destructoring, tree
             assignment_lhs = []
