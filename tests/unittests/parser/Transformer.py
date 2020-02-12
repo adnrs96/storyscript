@@ -319,3 +319,22 @@ def test_multi_line_string_multi_line_start_backslash():
 
 def test_multi_line_string_multi_line_start_multiple_backslashs():
     assert Transformer.multi_line_string("\\\n\\\n  b") == "b"
+
+
+@mark.parametrize(
+    "token",
+    [
+        Token("KEYWORD_AS", "as"),
+        Token("KEYWORD_TO", "to"),
+        Token("KEYWORD_AND", "and"),
+        Token("KEYWORD_OR", "or"),
+        Token("KEYWORD_NOT", "not"),
+    ],
+)
+def test_transformer_arguments(patch, tree, token):
+    patch.object(Tree, "create_token_from_tok")
+    name_tok = Token("NAME", token.value)
+    Tree.create_token_from_tok.return_value = name_tok
+    matches = [token, tree]
+    result = Transformer.arguments(matches)
+    assert result == Tree("arguments", [name_tok, tree])
