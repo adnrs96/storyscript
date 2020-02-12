@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 1
+
+1|    service action from: "" to: "" # Idea is to demonstrate argument `to` is parsed successfully.
+      ^^^^^^^
+
+E0030: `service` is reserved for future use
