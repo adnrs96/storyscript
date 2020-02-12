@@ -490,6 +490,17 @@ class Transformer(LarkTransformer):
             "mutation", [Tree("mutation_fragment", [matches[0], *matches[1:]])]
         )
 
+    @classmethod
+    def arguments(cls, matches):
+        if isinstance(matches[0], Token) and matches[0].type.startswith(
+            "KEYWORD_"
+        ):
+            name_tok = Tree.create_token_from_tok(
+                matches[0], "NAME", matches[0].value
+            )
+            return Tree("arguments", [name_tok, *matches[1:]])
+        return Tree("arguments", matches)
+
     @staticmethod
     def build_inline(node):
         """

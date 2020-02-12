@@ -53,7 +53,7 @@ continue_statement: CONTINUE
 entity: values| path
 rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block| invalid_comment
 command: NAME
-arguments: NAME? _COLON expression
+arguments: (NAME | KEYWORD_OR | KEYWORD_AND | KEYWORD_TO | KEYWORD_AS | KEYWORD_NOT)? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)
 service_fragment: command arguments* output?
 when_service_fragment: (command arguments*|arguments+) output?
@@ -157,6 +157,11 @@ INVALID_LONG_COMMENT.5: /[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/
 RETURN: "return"
 BREAK: "break"
 CONTINUE: "continue"
+KEYWORD_OR.2: /or(?=:)/
+KEYWORD_AND.2: /and(?=:)/
+KEYWORD_NOT.2: /not(?=:)/
+KEYWORD_TO.2: /to(?=:)/
+KEYWORD_AS.2: /as(?=:)/
 _IF: "if"
 _ELSE: "else"
 _FOREACH: "foreach"

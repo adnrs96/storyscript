@@ -241,7 +241,15 @@ class Grammar:
 
     def service_block(self):
         self.ebnf.command = "name"
-        self.ebnf.arguments = "name? colon expression"
+        self.ebnf.set_token("KEYWORD_OR.2", "/or(?=:)/")
+        self.ebnf.set_token("KEYWORD_AND.2", "/and(?=:)/")
+        self.ebnf.set_token("KEYWORD_NOT.2", "/not(?=:)/")
+        self.ebnf.set_token("KEYWORD_TO.2", "/to(?=:)/")
+        self.ebnf.set_token("KEYWORD_AS.2", "/as(?=:)/")
+        self.ebnf.arguments = (
+            "(name | KEYWORD_OR | KEYWORD_AND | KEYWORD_TO | "
+            "KEYWORD_AS | KEYWORD_NOT)? colon expression"
+        )
         self.ebnf.output = "(as name (comma name)*)"
         self.ebnf.service_fragment = "command arguments* output?"
         self.ebnf.when_service_fragment = (
