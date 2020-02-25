@@ -241,11 +241,11 @@ class Grammar:
 
     def service_block(self):
         self.ebnf.command = "name"
-        self.ebnf.set_token("KEYWORD_OR.2", "/or(?=:)/")
-        self.ebnf.set_token("KEYWORD_AND.2", "/and(?=:)/")
-        self.ebnf.set_token("KEYWORD_NOT.2", "/not(?=:)/")
-        self.ebnf.set_token("KEYWORD_TO.2", "/to(?=:)/")
-        self.ebnf.set_token("KEYWORD_AS.2", "/as(?=:)/")
+        self.ebnf.set_token("KEYWORD_OR.2", r"/or(?=\s*:)/")
+        self.ebnf.set_token("KEYWORD_AND.2", r"/and(?=\s*:)/")
+        self.ebnf.set_token("KEYWORD_NOT.2", r"/not(?=\s*:)/")
+        self.ebnf.set_token("KEYWORD_TO.2", r"/to(?=\s*:)/")
+        self.ebnf.set_token("KEYWORD_AS.2", r"/as(?=\s*:)/")
         self.ebnf.arguments = (
             "(name | KEYWORD_OR | KEYWORD_AND | KEYWORD_TO | "
             "KEYWORD_AS | KEYWORD_NOT)? colon expression"

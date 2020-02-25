@@ -157,11 +157,11 @@ INVALID_LONG_COMMENT.5: /[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/
 RETURN: "return"
 BREAK: "break"
 CONTINUE: "continue"
-KEYWORD_OR.2: /or(?=:)/
-KEYWORD_AND.2: /and(?=:)/
-KEYWORD_NOT.2: /not(?=:)/
-KEYWORD_TO.2: /to(?=:)/
-KEYWORD_AS.2: /as(?=:)/
+KEYWORD_OR.2: /or(?=\s*:)/
+KEYWORD_AND.2: /and(?=\s*:)/
+KEYWORD_NOT.2: /not(?=\s*:)/
+KEYWORD_TO.2: /to(?=\s*:)/
+KEYWORD_AS.2: /as(?=\s*:)/
 _IF: "if"
 _ELSE: "else"
 _FOREACH: "foreach"
