@@ -1,0 +1,6 @@
+Error: syntax error in story at line 1, column 21
+
+1|    http fetch url: ""  not : ""
+                          ^^^^^^^^
+
+E0141: http action `fetch` does not accept argument `not`.

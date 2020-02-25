@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 13
+Error: syntax error in story at line 1, column 20
 
-1|    http server from: "" not: "" // Idea is to demonstrate argument `not` is parsed successfully.
-                  ^^^^^^^^
+1|    http fetch url: "" not: "" // Idea is to demonstrate argument `not` is parsed successfully.
+                         ^^^^^^^
 
-E0141: http action `server` does not accept argument `from`.
+E0141: http action `fetch` does not accept argument `not`.

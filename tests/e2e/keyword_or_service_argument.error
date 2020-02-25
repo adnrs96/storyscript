@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 13
+Error: syntax error in story at line 1, column 20
 
-1|    http server from: "" or: "" // Idea is to demonstrate argument `or` is parsed successfully.
-                  ^^^^^^^^
+1|    http fetch url: "" or: "" // Idea is to demonstrate argument `or` is parsed successfully.
+                         ^^^^^^
 
-E0141: http action `server` does not accept argument `from`.
+E0141: http action `fetch` does not accept argument `or`.

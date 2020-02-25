@@ -1,1 +1,1 @@
-http server from: "" as: "" // Idea is to demonstrate argument `as` is parsed successfully.
+http fetch url: "" as: "" // Idea is to demonstrate argument `as` is parsed successfully.
