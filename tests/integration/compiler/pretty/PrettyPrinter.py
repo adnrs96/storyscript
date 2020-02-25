@@ -123,6 +123,9 @@ def story_format(source):
         ('a="5" to  List[int]', 'a = "5" to List[int]'),
         ('a="5" to  List[List[float]]', 'a = "5" to List[List[float]]'),
         ('a="5" to  Map[string, boolean]', 'a = "5" to Map[string, boolean]'),
+        ("{a}=req.queryParams", "{ a } = req.queryParams"),
+        ("{a,b}=req.queryParams", "{ a, b } = req.queryParams"),
+        ("a.b=req.queryParams", "a.b = req.queryParams"),
     ],
 )
 def test_compiler_pretty_print_format(source, expected):
