@@ -214,8 +214,6 @@ class Grammar:
     def comments(self):
         self.ebnf.set_token("SHORT_COMMENT.6", r"/(\r?\n)?\s*\/\/[^\n\r]*/")
         self.ebnf.ignore("SHORT_COMMENT")
-        self.ebnf.set_token("INLINE_COMMENT.6", r"/\s\/\/[^\n\r]*/")
-        self.ebnf.ignore("INLINE_COMMENT")
         self.ebnf.set_token(
             "LONG_COMMENT.6",
             r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/",

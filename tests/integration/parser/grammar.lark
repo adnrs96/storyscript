@@ -152,7 +152,6 @@ PLUS.5: "+"
 DASH.5: "-"
 FLOAT_MUT.5: FLOAT NAME "("
 SHORT_COMMENT.6: /(\r?\n)?\s*\/\/[^\n\r]*/
-INLINE_COMMENT.6: /\s\/\/[^\n\r]*/
 LONG_COMMENT.6: /(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/
 INVALID_LONG_COMMENT.5: /[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/
 RETURN: "return"
@@ -171,7 +170,6 @@ THROW: "throw"
 _WHEN: "when"
 
 %ignore SHORT_COMMENT
-%ignore INLINE_COMMENT
 %ignore LONG_COMMENT
 %ignore _WS
 
