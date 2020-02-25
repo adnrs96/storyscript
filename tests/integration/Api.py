@@ -39,7 +39,7 @@ def test_api_loads_with_hub():
     """
     Ensures Api.load functions return errors
     """
-    hub = ServiceWrapper(services=None)
+    hub = ServiceWrapper(services=[])
     story = Api.loads("http server", backend="semantic", hub=hub)
     e = story.errors()[0]
     assert (
