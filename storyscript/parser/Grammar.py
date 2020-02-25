@@ -216,7 +216,7 @@ class Grammar:
         self.ebnf.ignore("SHORT_COMMENT")
         self.ebnf.set_token(
             "LONG_COMMENT.6",
-            r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*?\*\/(?=\s*(\r?\n))/",
+            r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*\*\/(?=\s*(\r?\n))/",
         )
         self.ebnf.ignore("LONG_COMMENT")
         self.ebnf.set_token(
