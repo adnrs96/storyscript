@@ -1,6 +1,6 @@
-Error: syntax error in story at line 1, column 1
+Error: syntax error in story at line 1, column 13
 
-1|    service action from: "" to: "" # Idea is to demonstrate argument `to` is parsed successfully.
-      ^^^^^^^
+1|    http server from: "" to: "" // Idea is to demonstrate argument `to` is parsed successfully.
+                  ^^^^^^^^
 
-E0030: `service` is reserved for future use
+E0141: http action `server` does not accept argument `from`.

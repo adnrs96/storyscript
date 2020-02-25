@@ -1,1 +1,1 @@
-service action from: "" as: "" # Idea is to demonstrate argument `as` is parsed successfully.
+http server from: "" as: "" // Idea is to demonstrate argument `as` is parsed successfully.
