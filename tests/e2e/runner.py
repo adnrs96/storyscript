@@ -11,25 +11,20 @@ from click import unstyle
 
 from pytest import fixture, mark
 
-from storyhub.sdk.ServiceWrapper import ServiceWrapper
-
 import storyscript.hub.Hub as StoryHub
 from storyscript.Api import Api
 from storyscript.App import _clean_dict
 
 from tests.e2e.utils.Features import parse_features
+from tests.e2e.utils.fixtures import hub, test_dir
 
-test_dir = path.dirname(path.realpath(__file__))
+
 # make the test_file paths relative, s.t. test paths are nice to read
 test_files = list(
     map(
         lambda e: path.relpath(e, test_dir),
         glob(path.join(test_dir, "**", "*.story"), recursive=True),
     )
-)
-
-hub_fixtures_file = path.join(
-    path.dirname(test_dir), "fixtures", "hub_fixture.json.fixed"
 )
 
 features = {"globals": True}
@@ -113,7 +108,6 @@ def run_test(story_path):
 
 @fixture
 def patched_storyhub(mocker, scope="module"):
-    hub = ServiceWrapper.from_json_file(hub_fixtures_file)
     mocker.patch.object(StoryHub, "StoryscriptHub", return_value=hub)
 
 
