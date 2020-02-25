@@ -46,11 +46,12 @@ or_expression: (or_expression or_operator)? and_expression
 expression: or_expression
 absolute_expression: expression
 base_expression: (expression| inline_service)
+invalid_comment: INVALID_LONG_COMMENT
 return_statement: RETURN base_expression?
 break_statement: BREAK
 continue_statement: CONTINUE
 entity: values| path
-rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block
+rules: absolute_expression| assignment| return_statement| throw_statement| break_statement| continue_statement| block| invalid_comment
 command: NAME
 arguments: NAME? _COLON expression
 output: (_AS NAME (_COMMA NAME)*)
@@ -117,7 +118,7 @@ FLOAT.2: ("+"|"-")? INT "." RAW_INT? | "." RAW_INT
 SINGLE_QUOTED: /'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/
 DOUBLE_QUOTED: /"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/
 DOUBLE_QUOTED_HEREDOC.2: /"""(.|\n)*?"""/
-REGEXP.10: /\/([^\/\n]*)\/g?i?m?s?u?y?/
+REGEXP.10: /\/([^\/\n]+)\/g?i?m?s?u?y?/
 NAME.1: /[a-zA-Z_][-\w]*(\/[-\w]+)?(?<![-\/])/
 RAW_TIME.3: /([0-9]+(ms|[smhdw]))+/
 OCB: "{"
@@ -145,11 +146,14 @@ LESSER_EQUAL: "<="
 NOT_EQUAL: "!="
 EQUAL: "=="
 BSLASH.5: "/"
-MULTIPLIER: "*"
+MULTIPLIER.5: "*"
 MODULUS.5: "%"
 PLUS.5: "+"
 DASH.5: "-"
 FLOAT_MUT.5: FLOAT NAME "("
+SHORT_COMMENT.6: /(\r?\n)?\s*\/\/[^\n\r]*/
+LONG_COMMENT.6: /(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*\*\/(?=\s*(\r?\n))/
+INVALID_LONG_COMMENT.5: /[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/
 RETURN: "return"
 BREAK: "break"
 CONTINUE: "continue"
@@ -164,11 +168,9 @@ CATCH: "catch"
 FINALLY: "finally"
 THROW: "throw"
 _WHEN: "when"
-SINGLE_LINE_COMMENT: /(\r?\n)?\s*#[^\n\r]*/
-MULTI_LINE_COMMENT: /(\r?\n)?\s*#+##[^#](.|\n)*?###[^\n\r]*/
 
+%ignore SHORT_COMMENT
+%ignore LONG_COMMENT
 %ignore _WS
-%ignore SINGLE_LINE_COMMENT
-%ignore MULTI_LINE_COMMENT
 
 

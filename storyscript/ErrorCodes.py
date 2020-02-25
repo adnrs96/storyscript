@@ -361,6 +361,10 @@ class ErrorCodes:
         "E0161",
         "Effectless expressions without assignment not allowed.",
     )
+    invalid_comment = (
+        "E0162",
+        "Multiline comment must end with a newline.",
+    )
 
     @staticmethod
     def is_error(error_name):

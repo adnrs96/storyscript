@@ -1,18 +1,18 @@
-###
+/*
 .
 A multi-line comment
 .
-###
+*/
 a = 0
-#
-# single-line comment # ...
-#
-###
+//
+// single-line comment // ...
+//
+/*
 .
-Yet another multi-line comment with #
+Yet another multi-line comment with //
 .
-###
-#
-# single-line comment # ...
-#
+*/
+//
+// single-line comment // ...
+//
 b = 0

@@ -101,6 +101,12 @@ class Transformer(LarkTransformer):
         self.allow_single_quotes = allow_single_quotes
 
     @classmethod
+    def invalid_comment(cls, matches):
+        raise StorySyntaxError(
+            "invalid_comment", token=matches[0],
+        )
+
+    @classmethod
     def is_keyword(cls, token):
         keyword = token.value
         if keyword is None:

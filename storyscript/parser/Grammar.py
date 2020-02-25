@@ -62,7 +62,7 @@ class Grammar:
         self.ebnf.SINGLE_QUOTED = r"/'([^'\\]*(?:\\(.|\n)[^'\\]*)*)'/"
         self.ebnf.DOUBLE_QUOTED = r'/"([^"\\]*(?:\\(.|\n)[^"\\]*)*)"/'
         self.ebnf.set_token("DOUBLE_QUOTED_HEREDOC.2", r'/"""(.|\n)*?"""/')
-        self.ebnf.set_token("REGEXP.10", r"/\/([^\/\n]*)\/g?i?m?s?u?y?/")
+        self.ebnf.set_token("REGEXP.10", r"/\/([^\/\n]+)\/g?i?m?s?u?y?/")
         self.ebnf.set_token(
             "NAME.1", r"/[a-zA-Z_][-\w]*(\/[-\w]+)?(?<![-\/])/"
         )
@@ -148,7 +148,7 @@ class Grammar:
         self.ebnf.EQUAL = "=="
 
         self.ebnf.set_token("BSLASH.5", "/")
-        self.ebnf.MULTIPLIER = "*"
+        self.ebnf.set_token("MULTIPLIER.5", "*")
         self.ebnf.set_token("MODULUS.5", "%")
 
         self.ebnf.set_token("PLUS.5", "+")
@@ -211,6 +211,19 @@ class Grammar:
         self.ebnf.THROW = "throw"
         self.ebnf.throw_statement = "throw entity?"
 
+    def comments(self):
+        self.ebnf.set_token("SHORT_COMMENT.6", r"/(\r?\n)?\s*\/\/[^\n\r]*/")
+        self.ebnf.ignore("SHORT_COMMENT")
+        self.ebnf.set_token(
+            "LONG_COMMENT.6",
+            r"/(\r?\n)?\s*\/\*((?!(\*\/))(.|\n))*\*\/(?=\s*(\r?\n))/",
+        )
+        self.ebnf.ignore("LONG_COMMENT")
+        self.ebnf.set_token(
+            "INVALID_LONG_COMMENT.5", r"/[ \t\f\v]*\/\*(.|\n)*?\*\/[^\n\r]*/",
+        )
+        self.ebnf.invalid_comment = "invalid_long_comment"
+
     def rules(self):
         self.ebnf.RETURN = "return"
         self.ebnf.BREAK = "break"
@@ -222,7 +235,7 @@ class Grammar:
         rules = (
             "absolute_expression, assignment, return_statement, "
             "throw_statement, break_statement, continue_statement, "
-            "block"
+            "block, invalid_comment"
         )
         self.ebnf.rules = rules
 
@@ -319,6 +332,7 @@ class Grammar:
         self.values()
         self.assignments()
         self.expressions()
+        self.comments()
         self.rules()
         self.service_block()
         self.call_expression()
@@ -331,11 +345,5 @@ class Grammar:
         self.block()
         self.ebnf.start = "nl? block*"
         self.ebnf.ignore("_WS")
-        self.ebnf.SINGLE_LINE_COMMENT = r"/(\r?\n)?\s*#[^\n\r]*/"
-        self.ebnf.ignore("SINGLE_LINE_COMMENT")
-        self.ebnf.MULTI_LINE_COMMENT = (
-            r"/(\r?\n)?\s*#+##[^#](.|\n)*?###[^\n\r]*/"
-        )
-        self.ebnf.ignore("MULTI_LINE_COMMENT")
 
         return self.ebnf.build()

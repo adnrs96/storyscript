@@ -1,16 +1,16 @@
 a = [1]
-# access by number
+// access by number
 a[0] = 0
 
 b = {"a": "b"}
-# access by string
+// access by string
 b["a"] = "b"
 
 c = 0
-# access by name
+// access by name
 a[c] = 1
 
-# access by path
+// access by path
 b.a = "b"
 
 

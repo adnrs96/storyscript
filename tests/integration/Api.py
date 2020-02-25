@@ -134,7 +134,7 @@ Please report at https://github.com/storyscript/storyscript/issues"""
 
 
 def test_compiler_only_comments():
-    api_result = Api.load_map({"a.story": "# foo\n"}).result()
+    api_result = Api.load_map({"a.story": "// foo\n"}).result()
     result = api_result["stories"]["a.story"]
     assert result["tree"] == {}
     assert result["entrypoint"] is None
