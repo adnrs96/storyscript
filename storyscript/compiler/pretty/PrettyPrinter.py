@@ -53,22 +53,20 @@ class PrettyPrinter:
         assert tree.expression
         return self.objects.expression(tree.expression)
 
-    def join_names(self, names):
-        return "".join(names)
-
     def assignment(self, tree, parent):
         """
         Compiles an assignment tree.
         """
         if tree.path:
-            lhs = self.join_names(self.objects.names(tree.path))
+            lhs = "".join(self.objects.names(tree.path))
         else:
             assert tree.assignment_destructoring, tree
             assignment_lhs = []
             for path in tree.assignment_destructoring.extract("path"):
                 names = self.objects.names(path)
-                assignment_lhs.append(self.join_names(names))
-            lhs = "{ %s }" % (", ".join(assignment_lhs))
+                assignment_lhs.append("".join(names))
+            destructed_names = ", ".join(assignment_lhs)
+            lhs = f"{{ {destructed_names} }}"
         line = tree.line()
         fragment = tree.assignment_fragment.base_expression
         e = self.base_expression_assignment(fragment, parent, line)
